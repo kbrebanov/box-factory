@@ -1,0 +1,188 @@
+{
+  "min_packer_version": "0.8.5",
+
+  "variables": {
+    "user": "Administrator",
+    "password": "password",
+    "cpus": "1",
+    "cores": "1",
+    "memory": "768",
+    "disk_size": "40960",
+    "communicator": "winrm",
+    "hard_drive_interface": "sata",
+    "headless": "false",
+    "iso_checksum": "6612b5b1f53e845aacdf96e974bb119a3d9b4dcb5b82e65804ab7e534dc7b4d5",
+    "iso_checksum_type": "sha256",
+    "iso_url": "file:///windows-server-2012-r2-x64-evaluation.iso",
+    "shutdown_command": "shutdown /s /t 10 /d p:4:1 /c \"Packer Shutdown\""
+  },
+
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "name": "virtualbox-windows-server-2012-r2-core-x64",
+      "boot_wait": "10s",
+      "communicator": "{{user `communicator`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "floppy_files": [
+        "floppy/windows-server-2012-r2-x64/core/Autounattend.xml",
+        "scripts/windows/ps_execution_policy.bat",
+        "scripts/windows/winrm.ps1",
+        "scripts/windows/oracle-cert.cer"
+      ],
+      "format": "ovf",
+      "guest_os_type": "Windows2012_64",
+      "hard_drive_interface": "{{ user `hard_drive_interface`}}",
+      "headless": "{{user `headless`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/virtualbox-windows-server-2012-r2-core-x64/",
+      "shutdown_command": "{{user `shutdown_command`}}",
+      "winrm_password": "{{user `password`}}",
+      "winrm_username": "{{user `user`}}",
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ],
+        [ "modifyvm", "{{.Name}}", "--natpf1", "guestwinrm,tcp,127.0.0.1,5985,,5985"]
+      ]
+    },
+    {
+      "type": "virtualbox-iso",
+      "name": "vagrant-virtualbox-windows-server-2012-r2-core-x64",
+      "boot_wait": "10s",
+      "communicator": "{{user `communicator`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "floppy_files": [
+        "floppy/vagrant/windows-server-2012-r2-x64/core/Autounattend.xml",
+        "scripts/windows/ps_execution_policy.bat",
+        "scripts/windows/winrm.ps1",
+        "scripts/windows/oracle-cert.cer"
+      ],
+      "format": "ovf",
+      "guest_os_type": "Windows2012_64",
+      "hard_drive_interface": "{{user `hard_drive_interface`}}",
+      "headless": "{{user `headless`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/vagrant-virtualbox-windows-server-2012-r2-core-x64/",
+      "shutdown_command": "{{user `shutdown_command`}}",
+      "winrm_password": "vagrant",
+      "winrm_username": "vagrant",
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ],
+        [ "modifyvm", "{{.Name}}", "--natpf1", "guestwinrm,tcp,127.0.0.1,5985,,5985"]
+      ]
+    },
+    {
+      "type": "vmware-iso",
+      "name": "vmware-windows-server-2012-r2-core-x64",
+      "boot_wait": "10s",
+      "communicator": "{{user `communicator`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "floppy_files": [
+        "floppy/vagrant/windows-server-2012-r2-x64/core/Autounattend.xml",
+        "scripts/windows/ps_execution_policy.bat",
+        "scripts/windows/winrm.ps1",
+        "scripts/windows/oracle-cert.cer"
+      ],
+      "guest_os_type": "windows2012-64",
+      "headless": "{{user `headless`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/vmware-windows-server-2012-r2-core-x64/",
+      "shutdown_command": "{{user `shutdown_command`}}",
+      "winrm_password": "{{user `password`}}",
+      "winrm_username": "{{user `user`}}",
+      "vmx_data": {
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpus`}}",
+        "cpuid.coresPerSocket": "{{user `cores`}}",
+        "scsi0.virtualDev": "lsisas1068"
+      }
+    },
+    {
+      "type": "vmware-iso",
+      "name": "vagrant-vmware-windows-server-2012-r2-core-x64",
+      "boot_wait": "10s",
+      "communicator": "{{user `communicator`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "floppy_files": [
+        "floppy/vagrant/windows-server-2012-r2-x64/core/Autounattend.xml",
+        "scripts/windows/ps_execution_policy.bat",
+        "scripts/windows/winrm.ps1",
+        "scripts/windows/oracle-cert.cer"
+      ],
+      "guest_os_type": "windows2012-64",
+      "headless": "{{user `headless`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/vagrant-vmware-windows-server-2012-r2-core-x64/",
+      "shutdown_command": "{{user `shutdown_command`}}",
+      "winrm_password": "vagrant",
+      "winrm_username": "vagrant",
+      "vmx_data": {
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpus`}}",
+        "cpuid.coresPerSocket": "{{user `cores`}}",
+        "scsi0.virtualDev": "lsisas1068"
+      }
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "powershell",
+      "override": {
+        "virtualbox-windows-server-2012-r2-core-x64": {
+          "scripts": [
+            "scripts/windows/vmtools.ps1",
+            "scripts/windows/powersaving.ps1",
+            "scripts/windows/password_expiry.ps1",
+            "scripts/windows/disable_autologon.ps1"
+          ]
+        },
+        "vagrant-virtualbox-windows-server-2012-r2-core-x64": {
+          "scripts": [
+            "scripts/windows/vmtools.ps1",
+            "scripts/windows/powersaving.ps1",
+            "scripts/windows/password_expiry.ps1",
+            "scripts/windows/enable_rdp.ps1"
+          ]
+        },
+        "vmware-windows-server-2012-r2-core-x64": {
+          "scripts": [
+            "scripts/windows/vmtools.ps1",
+            "scripts/windows/powersaving.ps1",
+            "scripts/windows/password_expiry.ps1",
+            "scripts/windows/disable_autologon.ps1"
+          ]
+        },
+        "vagrant-vmware-windows-server-2012-r2-core-x64": {
+          "scripts": [
+            "scripts/windows/vmtools.ps1",
+            "scripts/windows/powersaving.ps1",
+            "scripts/windows/password_expiry.ps1",
+            "scripts/windows/enable_rdp.ps1"
+          ]
+        }
+      }
+    }
+  ],
+
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "only": [
+        "vagrant-virtualbox-windows-server-2012-r2-core-x64",
+        "vagrant-vmware-windows-server-2012-r2-core-x64"
+      ],
+      "vagrantfile_template": "vagrant_files/windows/Vagrantfile",
+      "output": "builds/{{.BuildName}}.box"
+    }
+  ]
+}

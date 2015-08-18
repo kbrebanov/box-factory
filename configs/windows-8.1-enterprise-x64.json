@@ -1,0 +1,192 @@
+{
+  "min_packer_version": "0.8.5",
+
+  "variables": {
+    "user": "Administrator",
+    "password": "password",
+    "cpus": "1",
+    "cores": "1",
+    "memory": "768",
+    "disk_size": "40960",
+    "headless": "false",
+    "iso_checksum": "2dedd44c45646c74efc5a028f65336027e14a56f76686a4631cf94ffe37c72f2",
+    "iso_checksum_type": "sha256",
+    "iso_url": "file:///windows-8.1-enterprise-x64-evaluation.iso",
+    "shutdown_command": "shutdown /s /t 10 /d p:4:1 /c \"Packer Shutdown\""
+  },
+
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "name": "virtualbox-windows-8.1-enterprise-x64",
+      "boot_wait": "10s",
+      "disk_size": "{{user `disk_size`}}",
+      "floppy_files": [
+        "floppy/windows-8.1-x64/enterprise/Autounattend.xml",
+        "scripts/windows/ps_execution_policy.bat",
+        "scripts/windows/winrm.ps1",
+        "scripts/windows/oracle-cert.cer"
+      ],
+      "format": "ovf",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "Windows81_64",
+      "hard_drive_interface": "sata",
+      "headless": "{{user `headless`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/virtualbox-windows-8.1-enterprise-x64/",
+      "shutdown_command": "{{user `shutdown_command`}}",
+      "ssh_password": "{{user `password`}}",
+      "ssh_port": 22,
+      "ssh_username": "{{user `user`}}",
+      "ssh_wait_timeout": "10000s",
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ]
+      ],
+      "virtualbox_version_file": ".vbox_version"
+    },
+    {
+      "type": "virtualbox-iso",
+      "name": "vagrant-virtualbox-windows-8.1-enterprise-x64",
+      "boot_wait": "10s",
+      "disk_size": "{{user `disk_size`}}",
+      "floppy_files": [
+        "floppy/vagrant/windows-8.1-x64/enterprise/Autounattend.xml",
+        "scripts/windows/ps_execution_policy.bat",
+        "scripts/windows/winrm.ps1",
+        "scripts/windows/oracle-cert.cer",
+        "scripts/windows/enable_rdp.ps1"
+      ],
+      "format": "ovf",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "Windows81_64",
+      "hard_drive_interface": "sata",
+      "headless": "{{user `headless`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/vagrant-virtualbox-windows-8.1-enterprise-x64/",
+      "shutdown_command": "{{user `shutdown_command`}}",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ]
+      ],
+      "virtualbox_version_file": ".vbox_version"
+    },
+    {
+      "type": "vmware-iso",
+      "name": "vmware-windows-8.1-enterprise-x64",
+      "boot_wait": "10s",
+      "disk_size": "{{user `disk_size`}}",
+      "floppy_files": [
+        "floppy/windows-8.1-x64/enterprise/Autounattend.xml",
+        "scripts/windows/ps_execution_policy.bat",
+        "scripts/windows/winrm.ps1"
+      ],
+      "guest_os_type": "windows8-64",
+      "headless": "{{user `headless`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/vmware-windows-8.1-enterprise-x64/",
+      "shutdown_command": "{{user `shutdown_command`}}",
+      "ssh_password": "{{user `password`}}",
+      "ssh_port": 22,
+      "ssh_username": "{{user `user`}}",
+      "ssh_wait_timeout": "10000s",
+      "tools_upload_flavor": "windows",
+      "vmx_data": {
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpus`}}",
+        "cpuid.coresPerSocket": "{{user `cores`}}",
+        "scsi0.virtualDev": "lsisas1068"
+      }
+    },
+    {
+      "type": "vmware-iso",
+      "name": "vagrant-vmware-windows-8.1-enterprise-x64",
+      "boot_wait": "10s",
+      "disk_size": "{{user `disk_size`}}",
+      "floppy_files": [
+        "floppy/vagrant/windows-8.1-x64/enterprise/Autounattend.xml",
+        "scripts/windows/ps_execution_policy.bat",
+        "scripts/windows/winrm.ps1",
+        "scripts/windows/enable_rdp.ps1"
+      ],
+      "guest_os_type": "windows8-64",
+      "headless": "{{user `headless`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/vagrant-vmware-windows-8.1-enterprise-x64/",
+      "shutdown_command": "{{user `shutdown_command`}}",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "tools_upload_flavor": "windows",
+      "vmx_data": {
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpus`}}",
+        "cpuid.coresPerSocket": "{{user `cores`}}",
+        "scsi0.virtualDev": "lsisas1068"
+      }
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "powershell",
+      "override": {
+        "virtualbox-windows-8.1-enterprise-x64": {
+          "scripts": [
+            "scripts/windows/vmtools.ps1",
+            "scripts/windows/powersaving.ps1",
+            "scripts/windows/disable_autologon.ps1"
+          ]
+        },
+        "vagrant-virtualbox-windows-8.1-enterprise-x64": {
+          "scripts": [
+            "scripts/windows/vmtools.ps1",
+            "scripts/windows/vagrant.ps1",
+            "scripts/windows/powersaving.ps1",
+            "scripts/windows/enable_rdp.ps1"
+          ]
+        },
+        "vmware-windows-8.1-enterprise-x64": {
+          "scripts": [
+            "scripts/windows/vmtools.ps1",
+            "scripts/windows/powersaving.ps1",
+            "scripts/windows/disable_autologon.ps1"
+          ]
+        },
+        "vagrant-vmware-windows-8.1-enterprise-x64": {
+          "scripts": [
+            "scripts/windows/vmtools.ps1",
+            "scripts/windows/vagrant.ps1",
+            "scripts/windows/powersaving.ps1",
+            "scripts/windows/enable_rdp.ps1"
+          ]
+        }
+      }
+    }
+  ],
+
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "only": [
+        "vagrant-virtualbox-windows-8.1-enterprise-x64",
+        "vagrant-vmware-windows-8.1-enterprise-x64"
+      ],
+      "vagrantfile_template": "vagrant_files/windows/Vagrantfile",
+      "output": "builds/{{.BuildName}}.box"
+    }
+  ]
+}

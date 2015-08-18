@@ -1,0 +1,194 @@
+{
+  "min_packer_version": "0.8.5",
+
+  "variables": {
+    "user": "usradm",
+    "password": "password",
+    "cpus": "1",
+    "cores": "1",
+    "memory": "480",
+    "disk_size": "40960",
+    "headless": "false",
+    "iso_checksum": "9d3fec5897be6b3fed4d3dda80b8fa7bb62c616bbfd4bdcd27295ca9b764f498",
+    "iso_checksum_type": "sha256",
+    "iso_url": "http://centos.mirror.iweb.ca/6.7/isos/x86_64/CentOS-6.7-x86_64-minimal.iso"
+  },
+
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "name": "virtualbox-centos-6.7-x86_64",
+      "boot_command": [
+        "<tab> text ks=http://{{.HTTPIP}}:{{.HTTPPort}}/centos-6.7/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": "{{user `disk_size`}}",
+      "format": "ovf",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "RedHat_64",
+      "hard_drive_interface": "sata",
+      "headless": "{{user `headless`}}",
+      "http_directory": "http",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/virtualbox-centos-6.7-x86_64/",
+      "shutdown_command": "echo '{{user `password`}}' | sudo -S /sbin/halt -h -p",
+      "ssh_password": "{{user `password`}}",
+      "ssh_port": 22,
+      "ssh_username": "{{user `user`}}",
+      "ssh_wait_timeout": "10000s",
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ]
+      ],
+      "virtualbox_version_file": ".vbox_version"
+    },
+    {
+      "type": "virtualbox-iso",
+      "name": "vagrant-virtualbox-centos-6.7-x86_64",
+      "boot_command": [
+        "<tab> text ks=http://{{.HTTPIP}}:{{.HTTPPort}}/vagrant/centos-6.7/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": "{{user `disk_size`}}",
+      "format": "ovf",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "RedHat_64",
+      "hard_drive_interface": "sata",
+      "headless": "{{user `headless`}}",
+      "http_directory": "http",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/vagrant-virtualbox-centos-6.7-x86_64/",
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ]
+      ],
+      "virtualbox_version_file": ".vbox_version"
+    },
+    {
+      "type": "vmware-iso",
+      "name": "vmware-centos-6.7-x86_64",
+      "boot_command": [
+        "<tab> text ks=http://{{.HTTPIP}}:{{.HTTPPort}}/centos-6.7/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": "{{user `disk_size`}}",
+      "guest_os_type": "centos-64",
+      "headless": "{{user `headless`}}",
+      "http_directory": "http",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/vmware-centos-6.7-x86_64/",
+      "shutdown_command": "echo '{{user `password`}}' | sudo -S /sbin/halt -h -p",
+      "ssh_password": "{{user `password`}}",
+      "ssh_port": 22,
+      "ssh_username": "{{user `user`}}",
+      "ssh_wait_timeout": "10000s",
+      "tools_upload_flavor": "linux",
+      "vmx_data": {
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpus`}}",
+        "cpuid.coresPerSocket": "{{user `cores`}}",
+        "ethernet0.virtualDev": "vmxnet3"
+      }
+    },
+    {
+      "type": "vmware-iso",
+      "name": "vagrant-vmware-centos-6.7-x86_64",
+      "boot_command": [
+        "<tab> text ks=http://{{.HTTPIP}}:{{.HTTPPort}}/vagrant/centos-6.7/ks.cfg<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": "{{user `disk_size`}}",
+      "guest_os_type": "centos-64",
+      "headless": "{{user `headless`}}",
+      "http_directory": "http",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "output_directory": "builds/vagrant-vmware-centos-6.7-x86_64/",
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "tools_upload_flavor": "linux",
+      "vmx_data": {
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpus`}}",
+        "cpuid.coresPerSocket": "{{user `cores`}}",
+        "ethernet0.virtualDev": "vmxnet3"
+      }
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "override": {
+        "virtualbox-centos-6.7-x86_64": {
+          "execute_command": "echo '{{user `password`}}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+          "scripts": [
+            "scripts/centos/root_certs.sh",
+            "scripts/common/sshd.sh",
+            "scripts/common/vmtools.sh",
+            "scripts/centos/cleanup.sh",
+            "scripts/common/minimize.sh"
+          ]
+        },
+        "vagrant-virtualbox-centos-6.7-x86_64": {
+          "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+          "scripts": [
+            "scripts/centos/root_certs.sh",
+            "scripts/common/sshd.sh",
+            "scripts/common/vmtools.sh",
+            "scripts/common/vagrant.sh",
+            "scripts/centos/cleanup.sh",
+            "scripts/common/minimize.sh"
+          ]
+        },
+        "vmware-centos-6.7-x86_64": {
+          "execute_command": "echo '{{user `password`}}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+          "scripts": [
+            "scripts/centos/root_certs.sh",
+            "scripts/common/sshd.sh",
+            "scripts/common/vmtools.sh",
+            "scripts/centos/cleanup.sh",
+            "scripts/common/minimize.sh"
+          ]
+        },
+        "vagrant-vmware-centos-6.7-x86_64": {
+          "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+          "scripts": [
+            "scripts/centos/root_certs.sh",
+            "scripts/common/sshd.sh",
+            "scripts/common/vmtools.sh",
+            "scripts/common/vagrant.sh",
+            "scripts/centos/cleanup.sh",
+            "scripts/common/minimize.sh"
+          ]
+        }
+      }
+    }
+  ],
+
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "only": [
+        "vagrant-virtualbox-centos-6.7-x86_64",
+        "vagrant-vmware-centos-6.7-x86_64"
+      ],
+      "output": "builds/{{.BuildName}}.box"
+    }
+  ]
+}
